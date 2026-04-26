@@ -248,3 +248,4 @@ Copy all variables from `.env.local` into your hosting provider's environment se
 **CORS errors**
 → In Appwrite Console → Project Settings → Platforms, make sure `localhost` (dev) and your production domain are both added as Web platforms.
 # nest
+# nest
