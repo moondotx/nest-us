@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --green: #1a6b3c;
+  --green-light: #e8f5ee;
+  --green-mid: #2d8a52;
+  --accent: #f4a427;
+  --accent-light: #fef3dc;
+  --dark: #0f1a13;
+  --text: #1c2b20;
+  --muted: #6b7c70;
+  --border: #e2ebe4;
+  --surface: #f7faf8;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--white);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-fade-up { animation: fadeUp 0.5s ease forwards; }
+.animate-fade-up-1 { animation: fadeUp 0.5s 0.1s ease both; }
+.animate-fade-up-2 { animation: fadeUp 0.5s 0.2s ease both; }
+.animate-fade-up-3 { animation: fadeUp 0.5s 0.3s ease both; }
+.animate-marquee { animation: marquee 30s linear infinite; }
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed;
+    background: var(--green);
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--green-mid); box-shadow: 0 8px 24px rgba(26,107,60,0.25); transform: translateY(-1px); }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200;
+    background: var(--white); color: var(--green); border: 1.5px solid var(--green);
+  }
+  .btn-secondary:hover { background: var(--green-light); }
+  .input {
+    @apply w-full px-4 py-3 text-sm rounded-xl transition-all duration-200;
+    border: 1.5px solid var(--border); background: var(--white); color: var(--text); outline: none;
+  }
+  .input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(26,107,60,0.1); }
+  .input::placeholder { color: var(--muted); }
+  .card { @apply bg-white rounded-2xl overflow-hidden transition-all duration-300; border: 1px solid var(--border); }
+  .card-hover:hover { box-shadow: 0 12px 40px rgba(15,26,19,0.12); transform: translateY(-3px); }
+  .badge { @apply inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full; }
+  .verified { @apply inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full; background: var(--green-light); color: var(--green); }
+}
