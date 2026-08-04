@@ -18,10 +18,10 @@ const URGENCY_LABEL: Record<string, string> = {
 };
 
 const URGENCY_STYLE: Record<string, { bg: string; text: string }> = {
-  "ASAP":       { bg: "#fef9c3", text: "#854d0e" },
+  "ASAP": { bg: "#fef9c3", text: "#854d0e" },
   "This month": { bg: "#dcfce7", text: "#166534" },
   "Next month": { bg: "#dbeafe", text: "#1e40af" },
-  "Flexible":   { bg: "#f3f4f6", text: "#4b5563" },
+  "Flexible": { bg: "#f3f4f6", text: "#4b5563" },
 };
 
 function timeAgo(dateStr: string): string {
@@ -126,7 +126,7 @@ export default function FlatmateProfilePage() {
                 {timeAgo(flatmate.$createdAt)}
               </span>
               <span style={{ fontSize: 15, color: "var(--muted)", fontWeight: 500 }}>
-    {flatmate.occupation && <span style={{ fontSize: 15, color: "var(--muted)" }}>{flatmate.occupation} · </span>}{flatmate.age} · {flatmate.gender !== "Any" ? flatmate.gender : ""}
+                {flatmate.occupation && <span style={{ fontSize: 15, color: "var(--muted)" }}>{flatmate.occupation} · </span>}{flatmate.age} · {flatmate.gender !== "Any" ? flatmate.gender : ""}
               </span>
             </div>
 
@@ -230,11 +230,9 @@ export default function FlatmateProfilePage() {
             {/* Start a chat button */}
             {!isOwn && (
               <button
-                onClick={() => { if (!user) router.push("/login"); }}
-                style={{ width: "100%", padding: "15px", background: "var(--green)", color: "white", border: "none", borderRadius: 12, fontWeight: 700, fontSize: 16, cursor: startingChat ? "not-allowed" : "pointer", transition: "all 0.2s", opacity: startingChat ? 0.7 : 1 }}
+                onClick={handleMessage}
                 onMouseEnter={e => { if (!startingChat) e.currentTarget.style.background = "var(--green-mid)"; }}
                 onMouseLeave={e => { if (!startingChat) e.currentTarget.style.background = "var(--green)"; }}
-                onClick={handleMessage}
                 disabled={startingChat}
               >
                 {startingChat ? "Opening chat..." : "Start a chat"}
