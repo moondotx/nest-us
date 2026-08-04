@@ -62,9 +62,9 @@ function Tag({ label, active, onClick }: { label: string; active: boolean; onCli
 // ── Hint box ──────────────────────────────────────────────────────────────────
 function Hint({ type, children }: { type: "fyi" | "tip" | "new" | "prompt"; children: React.ReactNode }) {
   const styles = {
-    fyi:    { bg: "#eff6ff", border: "#bfdbfe", label: "FYI",     labelBg: "#2563eb", color: "#1e40af" },
-    tip:    { bg: "#f0fdf4", border: "#bbf7d0", label: "TIP",     labelBg: "#16a34a", color: "#15803d" },
-    new:    { bg: "#f0fdf4", border: "#bbf7d0", label: "NEW!",    labelBg: "#16a34a", color: "#15803d" },
+    fyi: { bg: "#eff6ff", border: "#bfdbfe", label: "FYI", labelBg: "#2563eb", color: "#1e40af" },
+    tip: { bg: "#f0fdf4", border: "#bbf7d0", label: "TIP", labelBg: "#16a34a", color: "#15803d" },
+    new: { bg: "#f0fdf4", border: "#bbf7d0", label: "NEW!", labelBg: "#16a34a", color: "#15803d" },
     prompt: { bg: "#f0fdf4", border: "transparent", label: "PROMPTS", labelBg: "transparent", color: "#15803d" },
   }[type];
   return (
@@ -164,6 +164,7 @@ export default function ListSpacePage() {
         mediaIds,
         hostId: user.$id,
         hostName: user.name,
+        views: 0,
       });
 
       setUploadProgress(100);
