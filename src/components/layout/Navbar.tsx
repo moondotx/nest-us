@@ -3,27 +3,26 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Home, User, MessageCircle, PlusCircle, LayoutList, BadgeCheck, TrendingUp, Info, FileText, Shield, Rss, LogOut, Zap } from "lucide-react";
+import { Menu, X, Home, User, MessageCircle, PlusCircle, LayoutList, BadgeCheck, TrendingUp, Info, FileText, Shield, Rss, LogOut } from "lucide-react";
 
 const MENU_ITEMS = [
-  { icon: User,         label: "My Profile & Settings", href: "/profile" },
-  { icon: MessageCircle,label: "Messages",              href: "/messages" },
-  { icon: PlusCircle,   label: "Create Listing",        href: "/create" },
-  { icon: LayoutList,   label: "My Listings",           href: "/dashboard" },
-  { icon: BadgeCheck,   label: "Verifications & Badges",href: "/dashboard" },
-  { icon: TrendingUp,   label: "My Plans",              href: "/plans" },
-  null,
-  { icon: Info,         label: "About",                 href: "/" },
-  { icon: Shield,       label: "Privacy Policy",        href: "/" },
-  { icon: FileText,     label: "Terms of Service",      href: "/" },
-  { icon: Rss,          label: "Blog",                  href: "/" },
+  { icon: User,          label: "My Profile & Settings", href: "/profile" },
+  { icon: MessageCircle, label: "Messages",               href: "/messages" },
+  { icon: PlusCircle,    label: "Create Listing",         href: "/create" },
+  { icon: LayoutList,    label: "My Listings",            href: "/dashboard" },
+  { icon: BadgeCheck,    label: "Verifications & Badges", href: "/dashboard" },
+  { icon: TrendingUp,    label: "My Plans",               href: "/plans" },
+  null, // divider
+  { icon: Info,          label: "About",                  href: "/" },
+  { icon: Shield,        label: "Privacy Policy",         href: "/" },
+  { icon: FileText,      label: "Terms of Service",       href: "/" },
+  { icon: Rss,           label: "Blog",                   href: "/" },
 ];
 
-// Drives responsiveness with real JS instead of relying on Tailwind's
-// hidden/md:flex classes actually being generated in the build.
+// Drives all responsive show/hide logic with real JS instead of Tailwind
+// classes, so it works regardless of the project's Tailwind config/purge.
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(false);
-
   useEffect(() => {
     const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
     const update = () => setIsMobile(mq.matches);
@@ -31,7 +30,6 @@ function useIsMobile(breakpoint = 768) {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, [breakpoint]);
-
   return isMobile;
 }
 
@@ -54,10 +52,15 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", fn);
   }, []);
 
-  // Close the mobile drawer automatically if the viewport grows past mobile
+  // Close mobile drawer if viewport grows past mobile, and lock body scroll while open
   useEffect(() => {
     if (!isMobile) setMobileOpen(false);
   }, [isMobile]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
 
   const handleLogout = async () => {
     setMenuOpen(false);
@@ -206,7 +209,7 @@ export default function Navbar() {
             style={{
               background: "none", border: "none", cursor: "pointer", padding: 8,
               display: "flex", alignItems: "center", justifyContent: "center",
-              position: "relative", zIndex: 150, flexShrink: 0,
+              position: "relative", zIndex: 150, flexShrink: 0, color: "var(--dark)",
             }}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
@@ -215,48 +218,87 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile backdrop */}
       {isMobile && mobileOpen && (
-        <div style={{ borderTop: "1px solid var(--border)", background: "white", padding: "16px 20px 20px", maxHeight: "calc(100vh - 64px)", overflowY: "auto" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {allLinks.map(({ href, label, active }) => (
-              <Link key={href} href={href} onClick={() => setMobileOpen(false)} style={{
-                padding: "10px 12px", borderRadius: 8, fontSize: 14, fontWeight: 500,
-                color: active ? "var(--green)" : "var(--text)",
-                background: active ? "var(--green-light)" : "transparent",
-                textDecoration: "none", display: "flex", alignItems: "center", gap: 6,
-              }}>
-                {href === "/flatmates" && <span>👥</span>}
-                {label}
-                {href === "/flatmates" && (
-                  <span style={{ fontSize: 9, fontWeight: 800, background: "var(--accent)", color: "white", padding: "1px 5px", borderRadius: 8, lineHeight: 1.7 }}>NEW</span>
-                )}
-              </Link>
-            ))}
-            <div style={{ borderTop: "1px solid var(--border)", marginTop: 8, paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-              {user ? (
-                <>
-                  {MENU_ITEMS.filter(Boolean).map((item: any) => (
-                    <Link key={item.label} href={item.href} onClick={() => setMobileOpen(false)}
-                      style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 14, color: "var(--text)", textDecoration: "none" }}>
-                      <item.icon size={15} color="var(--muted)" />
-                      {item.label}
-                    </Link>
-                  ))}
-                  <button onClick={handleLogout} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 14, color: "#dc2626", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}>
-                    <LogOut size={15} color="#dc2626" /> Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link href="/login" onClick={() => setMobileOpen(false)} style={{ padding: "10px 12px", borderRadius: 10, fontSize: 14, fontWeight: 600, textAlign: "center", color: "var(--green)", border: "1.5px solid var(--green)", textDecoration: "none" }}>Log in</Link>
-                  <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn-primary" style={{ borderRadius: 10, textDecoration: "none" }}>Sign up free</Link>
-                </>
-              )}
+        <div
+          onClick={() => setMobileOpen(false)}
+          style={{
+            position: "fixed", inset: 0, top: 64, background: "rgba(0,0,0,0.25)",
+            zIndex: 90, animation: "navFadeIn 0.15s ease",
+          }}
+        />
+      )}
+
+      {/* Mobile menu drawer */}
+      {isMobile && (
+        <div style={{
+          position: "fixed", top: 64, left: 0, right: 0, zIndex: 95,
+          background: "white", borderBottom: "1px solid var(--border)",
+          boxShadow: "0 12px 30px rgba(0,0,0,0.08)",
+          maxHeight: mobileOpen ? "calc(100vh - 64px)" : 0,
+          overflow: "hidden", transition: "max-height 0.22s ease",
+        }}>
+          <div style={{ padding: "18px 20px 24px", overflowY: "auto", maxHeight: "calc(100vh - 64px)" }}>
+            {user && (
+              <div style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 16, marginBottom: 12, borderBottom: "1px solid var(--border)" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--green)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800, flexShrink: 0 }}>
+                  {initials}
+                </div>
+                <div style={{ minWidth: 0 }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: "var(--dark)", lineHeight: 1.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{user.name}</p>
+                  <p style={{ fontSize: 12, color: "var(--muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{user.email}</p>
+                </div>
+              </div>
+            )}
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {allLinks.map(({ href, label, active }) => (
+                <Link key={href} href={href} onClick={() => setMobileOpen(false)} style={{
+                  padding: "11px 12px", borderRadius: 10, fontSize: 15, fontWeight: 500,
+                  color: active ? "var(--green)" : "var(--text)",
+                  background: active ? "var(--green-light)" : "transparent",
+                  textDecoration: "none", display: "flex", alignItems: "center", gap: 8,
+                }}>
+                  {href === "/flatmates" && <span>👥</span>}
+                  {label}
+                  {href === "/flatmates" && (
+                    <span style={{ fontSize: 9, fontWeight: 800, background: "var(--accent)", color: "white", padding: "1px 6px", borderRadius: 8, lineHeight: 1.7 }}>NEW</span>
+                  )}
+                </Link>
+              ))}
             </div>
+
+            {user && (
+              <div style={{ borderTop: "1px solid var(--border)", marginTop: 12, paddingTop: 12, display: "flex", flexDirection: "column", gap: 2 }}>
+                {MENU_ITEMS.filter(Boolean).map((item: any) => (
+                  <Link key={item.label} href={item.href} onClick={() => setMobileOpen(false)}
+                    style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, fontSize: 14, color: "var(--text)", textDecoration: "none" }}>
+                    <item.icon size={16} color="var(--muted)" strokeWidth={1.8} />
+                    {item.label}
+                  </Link>
+                ))}
+                <button onClick={handleLogout} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, fontSize: 14, color: "#dc2626", background: "none", border: "none", cursor: "pointer", textAlign: "left", marginTop: 2 }}>
+                  <LogOut size={16} color="#dc2626" strokeWidth={1.8} /> Logout
+                </button>
+              </div>
+            )}
+
+            {!user && (
+              <div style={{ borderTop: "1px solid var(--border)", marginTop: 12, paddingTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                <Link href="/login" onClick={() => setMobileOpen(false)} style={{ padding: "11px 12px", borderRadius: 10, fontSize: 14, fontWeight: 600, textAlign: "center", color: "var(--green)", border: "1.5px solid var(--green)", textDecoration: "none" }}>Log in</Link>
+                <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn-primary" style={{ padding: "11px 12px", borderRadius: 10, textAlign: "center", textDecoration: "none" }}>Sign up free</Link>
+              </div>
+            )}
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes navFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </nav>
   );
 }
