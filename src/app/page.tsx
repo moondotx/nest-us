@@ -299,7 +299,7 @@ export default function HomePage() {
                 <div style={{ width: 30, height: 30, borderRadius: 8, background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <Home size={15} color="white" />
                 </div>
-                <span style={{ fontWeight: 800, fontSize: 18, color: "white" }}>Nest<span style={{ color: "var(--green)" }}>.</span></span>
+                <span style={{ fontWeight: 800, fontSize: 18, color: "white" }}>Nest.<span style={{ color: "var(--green)" }}>.</span></span>
               </div>
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, maxWidth: 220 }}>
                 Nigeria's trusted platform for booking verified spaces.

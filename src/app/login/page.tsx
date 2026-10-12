@@ -36,7 +36,7 @@ function LeftPanel() {
 
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(255,255,255,0.15)", border: "1.5px solid rgba(255,255,255,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🏠</div>
-        <span style={{ fontWeight: 800, fontSize: 22, color: "white", letterSpacing: "-0.5px" }}>Nest<span style={{ color: "#f4a427" }}>.</span></span>
+        <span style={{ fontWeight: 800, fontSize: 22, color: "white", letterSpacing: "-0.5px" }}>Nest.<span style={{ color: "#f4a427" }}>.</span></span>
       </div>
 
       {/* Testimonial cards */}
